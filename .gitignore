@@ -1,0 +1,47 @@
+# 🔐 CREDENCIAIS - NUNCA COMMITAR!
+.env
+.env.local
+.env.*.local
+.env.production
+credentials.json
+secrets.json
+connections.local.json
+token.txt
+apikey.txt
+.github/secrets/
+
+# 📊 DADOS - Podem ser grandes
+*.xlsx
+*.xls
+*.csv
+*.parquet
+*.json.backup
+
+# 🍎 macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+*.swp
+*~
+
+# 💻 IDE e Editors
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.code-workspace
+*.swp
+*.swo
+
+# 📦 Node/npm (se usar)
+node_modules/
+package-lock.json
+npm-debug.log
+
+# 🔧 Temporários
+*.tmp
+*.bak
+*.log
+.cache/
+
+# 🚫 Arquivos do PBIP que são gerados
+*.pbipproj
