@@ -1,0 +1,16 @@
+{
+  "version": "1.0",
+  "connections": [
+    {
+      "name": "DatabricksSQL",
+      "type": "Spark",
+      "server": "https://dbc-b1d6858c-6ba7.cloud.databricks.com/sql/1.0/warehouses/1755d9d78d61e919",
+      "database": "power_bi_demo",
+      "authentication": {
+        "method": "UsernamePassword",
+        "username": "token",
+        "password": "${DATABRICKS_TOKEN}"
+      }
+    }
+  ]
+}

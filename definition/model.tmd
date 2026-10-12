@@ -1,0 +1,145 @@
+{
+  "name": "Vendas Dashboard",
+  "compatibilityLevel": 1550,
+  "model": {
+    "culture": "pt-BR",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "pt-BR",
+    "dataSources": [
+      {
+        "type": "structured",
+        "name": "DatabricksSQL",
+        "connectionDetails": {
+          "protocol": "databricks",
+          "address": {
+            "server": "https://dbc-b1d6858c-6ba7.cloud.databricks.com/sql/1.0/warehouses/1755d9d78d61e919",
+            "database": "power_bi_demo"
+          },
+          "authentication": null,
+          "query": null
+        },
+        "credential": {
+          "AuthenticationKind": "UsernamePassword",
+          "Username": "token",
+          "kind": "Databricks",
+          "path": "https://dbc-b1d6858c-6ba7.cloud.databricks.com/sql/1.0/warehouses/1755d9d78d61e919"
+        }
+      }
+    ],
+    "tables": [
+      {
+        "name": "vendas",
+        "columns": [
+          {
+            "name": "id_venda",
+            "dataType": "int64",
+            "isNullable": false,
+            "sourceColumn": "id_venda",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "data_venda",
+            "dataType": "dateTime",
+            "isNullable": true,
+            "sourceColumn": "data_venda",
+            "summarizeBy": "none",
+            "annotations": [
+              {
+                "name": "UnderlyingDateTimeDataType",
+                "value": "Date"
+              }
+            ]
+          },
+          {
+            "name": "valor_venda",
+            "dataType": "decimal",
+            "isNullable": true,
+            "sourceColumn": "valor_venda",
+            "summarizeBy": "sum"
+          },
+          {
+            "name": "regiao",
+            "dataType": "string",
+            "isNullable": true,
+            "sourceColumn": "regiao",
+            "summarizeBy": "none"
+          },
+          {
+            "name": "categoria",
+            "dataType": "string",
+            "isNullable": true,
+            "sourceColumn": "categoria",
+            "summarizeBy": "none"
+          }
+        ],
+        "measures": [
+          {
+            "name": "Total Vendas",
+            "expression": "SUM(vendas[valor_venda])",
+            "formatString": "#,##0.00",
+            "displayFolder": "Métricas",
+            "description": "Soma total do valor de vendas"
+          },
+          {
+            "name": "Qtd Vendas",
+            "expression": "COUNTROWS(vendas)",
+            "formatString": "#,##0",
+            "displayFolder": "Métricas",
+            "description": "Quantidade total de registros de venda"
+          },
+          {
+            "name": "Ticket Médio",
+            "expression": "DIVIDE([Total Vendas], [Qtd Vendas])",
+            "formatString": "#,##0.00",
+            "displayFolder": "Métricas",
+            "description": "Valor médio por venda"
+          },
+          {
+            "name": "Vendas 30D",
+            "expression": "CALCULATE([Total Vendas], DATESINPERIOD(vendas[data_venda], LASTDATE(vendas[data_venda]), -30, DAY))",
+            "formatString": "#,##0.00",
+            "displayFolder": "Métricas",
+            "description": "Total de vendas nos últimos 30 dias a partir da última data disponível"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "vendas-partition",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = Spark.Tables(\"https://dbc-b1d6858c-6ba7.cloud.databricks.com/sql/1.0/warehouses/1755d9d78d61e919\", [Catalog = \"power_bi_demo\", CreateNavigationProperties = false]),",
+                "    Schema = Source{[Schema=\"default\"]}[Data],",
+                "    vendas_Table = Schema{[Item=\"vendas\"]}[Data]",
+                "in",
+                "    vendas_Table"
+              ]
+            }
+          }
+        ],
+        "annotations": [
+          {
+            "name": "PBI_ResultType",
+            "value": "Table"
+          }
+        ]
+      }
+    ],
+    "annotations": [
+      {
+        "name": "PBIDesktopVersion",
+        "value": "2.128.0.0"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"vendas\"]"
+      }
+    ]
+  }
+}
